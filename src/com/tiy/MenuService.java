@@ -22,7 +22,7 @@ public class MenuService {
 	public MenuService(Scanner scanner) {
 		this.scanner = scanner;
 	}
-
+	//prompts menu options
 	public int promptForMainMenu(){
 		System.out.println("\n-- Main Menu --\n" +
 				"\n" +
@@ -34,11 +34,15 @@ public class MenuService {
 				" 6) Quit\n");
 		return waitForInt("Please choose an option: ");
 	}
+	//shoes a list of animals in a array with number
 	public void showAnimals(ArrayList<Animal> animals){
 		System.out.println("\n-- List Of Animals --\n");
 		for(int i = 0; i < animals.size(); i++){
 			System.out.format(textAlign,(i+1)+") "+animals.get(i).getName(),
 					animals.get(i).getSpecies());
+		}
+		if(animals.isEmpty()){
+			System.out.println("Sorry there are no animals.");
 		}
 	}
 	public int promptViewAnimalDetailMenu(){
@@ -55,7 +59,6 @@ public class MenuService {
 			HashMap.Entry entry = (HashMap.Entry) iterator.next();
 			System.out.format(textAlign,String.format("%s) %s",entry.getKey(),animalsWithName.get(entry.getKey()).getName()),animalsWithName.get(entry.getKey()).getSpecies());
 		}
-
 		return waitForInt("%nPlease choose an the proper ID for the Animal with this Name: ");
 	}
 
@@ -67,9 +70,8 @@ public class MenuService {
 		System.out.format(textAlign,"Age: " ,animal.getAge());
 		System.out.format(textAlign,"Description: " ,animal.getDescription());
 		System.out.format(textAlign,"Date Received: " ,animal.getDayReceived());
-
 	}
-
+	// gets int response from prompt and returns it
 	public int waitForInt(String prompt){
 		System.out.printf(prompt);
 
@@ -82,7 +84,7 @@ public class MenuService {
 			return scanner.nextInt();
 		}
 	}
-
+	//Gets a String response from prompt
 	public String waitForString(String prompt, boolean required){
 		System.out.printf(prompt);
 		String input = scanner.next();
@@ -93,10 +95,11 @@ public class MenuService {
 			return input;
 		}
 	}
+	//Gets current date
 	public LocalDate getDate(){
 		return LocalDate.now();
 	}
-
+	//Controls Yes or no prompt returns true if yes or y
 	public boolean getYesOrNo(String prompt) {
 		String input = waitForString(prompt,false);
 		if(input.toLowerCase().equals("y")||input.toLowerCase().equals("yes")){
@@ -104,7 +107,12 @@ public class MenuService {
 		}else if(input.toLowerCase().equals("n")||input.toLowerCase().equals("no")){
 			return false;
 		} else{
+			System.out.println("Needs to be (yes / no) or (y / n)");
 			return getYesOrNo(prompt);
 		}
+	}
+
+	public void pause(){
+		waitForString("%nPress ENTER to continue: ",false);
 	}
 }
