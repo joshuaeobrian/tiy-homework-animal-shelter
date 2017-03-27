@@ -2,6 +2,7 @@ package com.tiy;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Main {
@@ -42,8 +43,27 @@ public class Main {
                 else if (action == menuService.VIEW_ANIMAL_DETAIL) {
                     //Looping around like a loop ninja
                     while(true) {
-                        //gets animal from array
-                        Animal animal = getAnimal(menuService.waitForInt("%nWhat is the numeric ID of the animal you want to view?: "));
+                        Animal animal;
+                        int input = menuService.promptViewAnimalDetailMenu();
+                        if(input == menuService.SEARCH_BY_ID){
+                            //gets animal from array
+                            animal = getAnimal(menuService.waitForInt("%nWhat is the numeric ID of the animal you want to view?: "));
+                        }else if(input == menuService.SEARCH_BY_NAME){
+                            //gets animal id
+                            animal = getAnimal(
+                                    //displays animal by name with its id from hashmap
+                                    menuService.displayViewByName(
+                                            //searches array for name and returns hashmap
+                                            findByName(
+                                                    //gets proper ID then adds one to make up for list view id
+                                                    menuService.waitForString("Please type a name: ",false)
+                                            )
+                                    ) + 1
+                            );
+                        }else{
+                            System.out.println("Sorry, Invalid.");
+                            animal = null;
+                        }
                         //prints out animal detail
                         if(animal != null){
                             //shows animal details
@@ -63,6 +83,7 @@ public class Main {
                         Animal animal = getAnimal(menuService.waitForInt("%nWhat is the numeric ID of the animal you want to edit?: "));
                         //if null re ask questions
                         if(animal == null){
+                            System.out.println("Sorry, try again there is no animal with that ID.");
                             continue;
                         }
                         //updates and print out animal details
@@ -92,6 +113,7 @@ public class Main {
                         Animal animal = getAnimal(menuService.waitForInt("What is the numeric ID of the animal you want to delete?: "));
                         //if null re ask questions
                         if(animal == null){
+                            System.out.println("Sorry, try again there is no animal with that ID.");
                             continue;
                         }
                         //print out animal details
@@ -133,10 +155,23 @@ public class Main {
             return animals.get(index);
         }else{
             //prints out to console that the id does not exist in the array then returns null
-            System.out.println("Sorry, try again there is no animal with that ID.");
+
             return null;
         }
     }
+
+    public static HashMap<Integer,Animal> findByName(String name){
+        HashMap<Integer,Animal> searchAnimalByName = new HashMap<>();
+
+        for(int i = 0; i < animals.size(); i++){
+            if(animals.get(i).getName().toLowerCase().equals(name.toLowerCase())){
+                searchAnimalByName.put(i,animals.get(i));
+            }
+        }
+
+        return searchAnimalByName;
+    }
+
     //create a new animal
     public static void createAnimal(String name, String species, String breed,int age,LocalDate dateReceived, String description){
         animals.add(new Animal(name,species,breed,age,dateReceived,description));

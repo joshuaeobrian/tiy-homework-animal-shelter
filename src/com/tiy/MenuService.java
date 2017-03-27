@@ -16,6 +16,9 @@ public class MenuService {
 	public static final int EDIT_ANIMAL = 4;
 	public static final int DELETE_ANIMAL =5;
 	public static final int QUIT = 6;
+	//Search by options
+	public static final int SEARCH_BY_ID = 1;
+	public static final int SEARCH_BY_NAME = 2;
 	private Scanner scanner;
 	private String textAlign = " %-15s  %-9s %n";
 
@@ -52,8 +55,8 @@ public class MenuService {
 
 		return waitForInt("Please choose an option: ");
 	}
-
-	public int DisplayViewByName(HashMap<Integer,Animal> animalsWithName){
+	//displays names in hashmap with ids
+	public int displayViewByName(HashMap<Integer,Animal> animalsWithName){
 		Iterator iterator = animalsWithName.entrySet().iterator();
 		while(iterator.hasNext()){
 			HashMap.Entry entry = (HashMap.Entry) iterator.next();
@@ -61,7 +64,7 @@ public class MenuService {
 		}
 		return waitForInt("%nPlease choose an the proper ID for the Animal with this Name: ");
 	}
-
+	//displays animal details
 	public void animalDetails(Animal animal){
 		System.out.println();
 		System.out.format(textAlign,"Name: " ,animal.getName());
@@ -74,7 +77,7 @@ public class MenuService {
 	// gets int response from prompt and returns it
 	public int waitForInt(String prompt){
 		System.out.printf(prompt);
-
+		//if its not a integer than print error and try again
 		if(!scanner.hasNextInt()){
 			String badInput = scanner.next();
 			System.out.printf("%nError: %s is invalid option.%n",badInput);
