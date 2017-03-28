@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
+import java.util.Scanner;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
@@ -25,7 +27,9 @@ public class MenuServiceTest {
 
 	@Test
 	public void testMenuServiceConstructor(){
-
+		String input = "1";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
 	}
 
 	@Test
