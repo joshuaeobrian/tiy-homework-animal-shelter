@@ -33,12 +33,25 @@ public class MenuServiceTest {
 	}
 
 	@Test
-	public void testWaitForInt(){
+	public void testWaitForIntReturn(){
+		String input = "1";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
+		int response = menuService.waitForInt("Prompt For Option: ");
+
+		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
+		assertThat(response, equalTo(1));
 
 	}
-
 	@Test
-	public void testWaitForString(){
+	public void testWaitForStringOutputAndReturn(){
+		String input = "Bob";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
+		String response = menuService.waitForString("%nPlease type a name: ");
+
+		assertThat(outputStream.toString(),containsString("Please type a name:"));
+		assertThat(response,equalTo("Bob"));
 
 	}
 
