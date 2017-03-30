@@ -46,7 +46,7 @@ public class Main {
 
                 }
                 if(response == menuService.SEARCH_BY_NAME){
-                    animal = menuService.viewAnimalByName(animals,"Please enter a name you would like to search: ");
+                    animal = menuService.viewAnimalByName(animals,"%nPlease enter a name you would like to search: ");
                 }
                 menuService.showDetailsOfAnimal(animal);
 

@@ -80,7 +80,7 @@ public class MenuService {
 	}
 
 	public String waitForString(String prompt, boolean required) {
-		System.out.printf("%n%s",prompt);
+		System.out.printf(prompt);
 		String input = scanner.next();
 		if(required && input.isEmpty()){
 			System.out.println("This field must be filled out...");
@@ -97,6 +97,7 @@ public class MenuService {
 		}else if(response.toLowerCase().equals("n")||response.toLowerCase().equals("no")){
 			return false;
 		}else{
+			System.out.printf("%n is a invalid option please type (yes/no or y/n).");
 			return isYesOrNo(prompt);
 		}
 	}
