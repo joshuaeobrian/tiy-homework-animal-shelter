@@ -18,6 +18,8 @@ public class MenuService {
 	public static final int EDIT_ANIMAL = 4;
 	public static final int DELETE_ANIMAL = 5;
 	public static final int QUIT = 6;
+	public static final int SEARCH_BY_ID = 1;
+	public static final int SEARCH_BY_NAME = 2;
 	private String textAlign = " %-15s  %-9s %n";
 
 	private Scanner scanner;
@@ -34,12 +36,12 @@ public class MenuService {
 				" 3) View animal details\n" +
 				" 4) Edit an animal\n" +
 				" 5) Delete an animal\n" +
-				" 6) Quit\n");
+				" 6) Quit");
 		return waitForInt("Please choose an option: ");
 	}
 
 	public int waitForInt(String prompt) {
-		System.out.printf(prompt);
+		System.out.printf("%n%s",prompt);
 		if(!scanner.hasNextInt()){
 			String badInput = scanner.next();
 			System.out.printf("%nSorry, %s is a invalid option.",badInput);
@@ -48,9 +50,37 @@ public class MenuService {
 			return scanner.nextInt();
 		}
 	}
+	public int promptSearchMenu(String menuHeader){
+		System.out.printf("%n%n-- %s --%n"+
+				"%n1) Lookup by ID" +
+				"%n2) Lookup by Name%n",menuHeader);
+
+		return waitForInt("Please choose an option: ");
+	}
+
+	public Animal viewAnimalByName(ArrayList<Animal>animals,String prompt){
+
+		int animalCount=0;
+		String name = waitForString(prompt,false);
+		for(int i = 0; i < animals.size();i++){
+			Animal animal = animals.get(i);
+			if(name.toLowerCase().equals(animal.getName().toLowerCase())){
+				animalCount++;
+				System.out.format(textAlign,(i+1)+") "+animal.getName(),animal.getSpecies());
+			}
+		}
+
+		if(animalCount == 0){
+			System.out.println("Sorry, there are no animals with that name.\nPlease try again...");
+			return viewAnimalByName(animals,waitForString(prompt,true));
+		}else{
+
+			return animals.get(waitForInt("What is the numeric ID of the animal you want to view?: ")-1);
+		}
+	}
 
 	public String waitForString(String prompt, boolean required) {
-		System.out.printf(prompt);
+		System.out.printf("%n%s",prompt);
 		String input = scanner.next();
 		if(required && input.isEmpty()){
 			System.out.println("This field must be filled out...");
@@ -80,7 +110,7 @@ public class MenuService {
 	}
 
 	public void showDetailsOfAnimal(Animal animal) {
-
+		System.out.println();
 		System.out.format(textAlign,"Name:",animal.getName());
 		System.out.format(textAlign,"Species:",animal.getSpecies());
 		System.out.format(textAlign,"Breed:",animal.getBreed());

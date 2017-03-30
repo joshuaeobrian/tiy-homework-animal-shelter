@@ -3,6 +3,7 @@ package com.tiy;
 
 import java.util.ArrayList;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -12,6 +13,10 @@ public class Main {
 
 
     public static void main(String[] args) {
+        animals.addAll(Arrays.asList(
+                new Animal("Bob","Cat","",""),
+                new Animal("Larry","Dog","",""),
+                new Animal("Mo","Cat","","")));
        Scanner scanner = new Scanner(System.in);
         scanner.useDelimiter("[\n]");
 
@@ -32,10 +37,17 @@ public class Main {
                 System.out.println("\n" +
                         "Success: The animal has been created!");
             }else if(userChoice ==menuService.VIEW_ANIMAL){
-                System.out.println("\n-- View an Animal --\n");
-                Animal animal = animals.get(
-                        menuService.waitForInt("What is the numeric ID of the animal you want to view?: ")-1
-                );
+                int response = menuService.promptSearchMenu("View Details Menu");
+                Animal animal = null;
+                if(response == menuService.SEARCH_BY_ID) {
+                    animal = animals.get(
+                            menuService.waitForInt("What is the numeric ID of the animal you want to view?: ") - 1
+                    );
+
+                }
+                if(response == menuService.SEARCH_BY_NAME){
+                    animal = menuService.viewAnimalByName(animals,"Please enter a name you would like to search: ");
+                }
                 menuService.showDetailsOfAnimal(animal);
 
             }

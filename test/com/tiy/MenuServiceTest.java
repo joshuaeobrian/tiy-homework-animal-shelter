@@ -9,6 +9,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import java.util.Scanner;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -38,12 +40,17 @@ public class MenuServiceTest {
 		int del = menuService.DELETE_ANIMAL;
 		int quit = menuService.QUIT;
 
+		int searchByID = menuService.SEARCH_BY_ID;
+		int searchByName = menuService.SEARCH_BY_NAME;
+
 		assertThat(list,equalTo(1));
 		assertThat(create,equalTo(2));
 		assertThat(view,equalTo(3));
 		assertThat(edit,equalTo(4));
 		assertThat(del,equalTo(5));
 		assertThat(quit,equalTo(6));
+		assertThat(searchByID,equalTo(1));
+		assertThat(searchByName,equalTo(2));
 	}
 
 	@Test
@@ -58,6 +65,7 @@ public class MenuServiceTest {
 		String input = "1";
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
+
 		int response = menuService.waitForInt("Prompt For Option: ");
 
 		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
@@ -70,6 +78,7 @@ public class MenuServiceTest {
 		String input = "2";
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
+
 		int response = menuService.waitForInt("Prompt For Option: ");
 
 		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
@@ -82,6 +91,7 @@ public class MenuServiceTest {
 		String input = "3";
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
+
 		int response = menuService.waitForInt("Prompt For Option: ");
 
 		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
@@ -94,6 +104,7 @@ public class MenuServiceTest {
 		String input = "4";
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
+
 		int response = menuService.waitForInt("Prompt For Option: ");
 
 		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
@@ -106,6 +117,7 @@ public class MenuServiceTest {
 		String input = "5";
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
+
 		int response = menuService.waitForInt("Prompt For Option: ");
 
 		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
@@ -118,6 +130,7 @@ public class MenuServiceTest {
 		String input = "6";
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
+
 		int response = menuService.waitForInt("Prompt For Option: ");
 
 		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
@@ -130,6 +143,7 @@ public class MenuServiceTest {
 		String input = "Bob";
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
+
 		String response = menuService.waitForString("%nPlease type a name: ",false);
 
 		assertThat(outputStream.toString(),containsString("Please type a name:"));
@@ -142,9 +156,59 @@ public class MenuServiceTest {
 		String input = "yes";
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
+
 		boolean response = menuService.isYesOrNo("Would you like to exit(yes/no): ");
+
 		assertThat(outputStream.toString(),containsString("Would you like to exit(yes/no):"));
 		assertThat(response,equalTo(true));
+	}
+
+	@Test
+	public void testSearchMenuOptionOne(){
+		String input = "1";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
+
+		int response = menuService.promptSearchMenu("View Details Menu");
+
+		assertThat(response, equalTo(1));
+	}
+
+	@Test
+	public void testSearchMenuOptionTwo(){
+		String input = "2";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
+
+		int response = menuService.promptSearchMenu("View Details Menu");
+
+		assertThat(response, equalTo(2));
+	}
+
+	@Test
+	public void testSearchByName(){
+		ArrayList<Animal> animals = new ArrayList<>();
+
+		animals.addAll(Arrays.asList(
+				new Animal("Bob","Cat","",""),
+				new Animal("Larry","Dog","",""),
+				new Animal("Mo","Cat","","")));
+
+		ByteArrayInputStream inputStream = new ByteArrayInputStream((
+					"Larry\n" +
+						"2\n"
+
+		).getBytes());
+
+		System.setIn(inputStream);
+		Scanner scanner = new Scanner(System.in);
+		scanner.useDelimiter("[\n]");
+		MenuService menuService = new MenuService(scanner);
+		Animal animal = menuService.viewAnimalByName(animals,"Please Type a name of an animal: ");
+
+		assertThat(animal.getName(), equalTo("Larry"));
+
+
 	}
 
 	@Test
