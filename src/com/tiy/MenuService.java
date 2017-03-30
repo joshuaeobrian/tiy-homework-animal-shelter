@@ -49,13 +49,19 @@ public class MenuService {
 		}
 	}
 
-	public String waitForString(String prompt) {
+	public String waitForString(String prompt, boolean required) {
 		System.out.printf(prompt);
-		return scanner.next();
+		String input = scanner.next();
+		if(required && input.isEmpty()){
+			System.out.println("This field must be filled out...");
+			return waitForString(prompt,required);
+		}else{
+			return input;
+		}
 	}
 
 	public boolean isYesOrNo(String prompt) {
-		String response = waitForString(prompt);
+		String response = waitForString(prompt,false);
 		if(response.toLowerCase().equals("y")||response.toLowerCase().equals("yes")){
 			return true;
 		}else if(response.toLowerCase().equals("n")||response.toLowerCase().equals("no")){
@@ -68,18 +74,41 @@ public class MenuService {
 	public void listAnimals(ArrayList<Animal> animals) {
 		System.out.println("\n-- List Animals --\n");
 		for(int index = 0; index < animals.size();index++){
-			System.out.format(textAlign,(index+1)+")"+animals.get(index).getName(),animals.get(index).getSpecies());
+			System.out.format(textAlign,(index+1)+") "+animals.get(index).getName(),animals.get(index).getSpecies());
 
 		}
 	}
 
 	public void showDetailsOfAnimal(Animal animal) {
-		System.out.println();
+
 		System.out.format(textAlign,"Name:",animal.getName());
 		System.out.format(textAlign,"Species:",animal.getSpecies());
 		System.out.format(textAlign,"Breed:",animal.getBreed());
 		System.out.format(textAlign,"Description:",animal.getDescription());
 
+	}
+	public void updateAnimal(Animal animal){
+
+		String input = "";
+		input = waitForString(String.format("Name [%s]: ",animal.getName()),false);
+		if(!input.isEmpty()){
+			animal.setName(input);
+		}
+		input = waitForString(String.format("Species [%s]: ",animal.getSpecies()),false);
+		if(!input.isEmpty()){
+			animal.setSpecies(input);
+		}
+		input = waitForString(String.format("Breed [%s]: ",animal.getBreed()),false);
+		if(!input.isEmpty()){
+			animal.setBreed(input);
+		}
+		input = waitForString(String.format("Description [%s]: ",animal.getDescription()),false);
+		if(!input.isEmpty()){
+			animal.setDescription(input);
+		}
+	}
+	public void pause(){
+		waitForString("Press ENTER when ready to continue...",false);
 	}
 }
 

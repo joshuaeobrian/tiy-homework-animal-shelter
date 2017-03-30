@@ -3,12 +3,11 @@ package com.tiy;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+
 import java.io.PrintStream;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -55,7 +54,7 @@ public class MenuServiceTest {
 	}
 
 	@Test
-	public void testWaitForIntReturn(){
+	public void testWaitForIntReturnOne(){
 		String input = "1";
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
@@ -65,12 +64,73 @@ public class MenuServiceTest {
 		assertThat(response, equalTo(1));
 
 	}
+
+	@Test
+	public void testWaitForIntReturnTwo(){
+		String input = "2";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
+		int response = menuService.waitForInt("Prompt For Option: ");
+
+		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
+		assertThat(response, equalTo(2));
+
+	}
+
+	@Test
+	public void testWaitForIntReturnThree(){
+		String input = "3";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
+		int response = menuService.waitForInt("Prompt For Option: ");
+
+		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
+		assertThat(response, equalTo(3));
+
+	}
+
+	@Test
+	public void testWaitForIntReturnFour(){
+		String input = "4";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
+		int response = menuService.waitForInt("Prompt For Option: ");
+
+		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
+		assertThat(response, equalTo(4));
+
+	}
+
+	@Test
+	public void testWaitForIntReturnFive(){
+		String input = "5";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
+		int response = menuService.waitForInt("Prompt For Option: ");
+
+		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
+		assertThat(response, equalTo(5));
+
+	}
+
+	@Test
+	public void testWaitForIntReturnSix(){
+		String input = "6";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
+		int response = menuService.waitForInt("Prompt For Option: ");
+
+		assertThat(outputStream.toString(), containsString("Prompt For Option: "));
+		assertThat(response, equalTo(6));
+
+	}
+
 	@Test
 	public void testWaitForStringOutputAndReturn(){
 		String input = "Bob";
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
-		String response = menuService.waitForString("%nPlease type a name: ");
+		String response = menuService.waitForString("%nPlease type a name: ",false);
 
 		assertThat(outputStream.toString(),containsString("Please type a name:"));
 		assertThat(response,equalTo("Bob"));
@@ -96,6 +156,7 @@ public class MenuServiceTest {
 		assertThat(outputStream.toString(),containsString("Would you like to exit(yes/no):"));
 		assertThat(response,equalTo(false));
 	}
+
 	@Test
 	public void testPromptForMenu(){
 		String input = "3";
@@ -129,6 +190,7 @@ public class MenuServiceTest {
 
 		assertThat(outputStream.toString(),containsString("-- List Animals --"));
 	}
+
 	@Test
 	public void testShowListOfAnimals(){
 		String input = "";
@@ -170,8 +232,33 @@ public class MenuServiceTest {
 
 	}
 
+	@Test
+	public void testUpdateOfAnimal(){
+		Animal animal = new Animal("Bob","Cat","","Likes to eat.");
+		ByteArrayInputStream inputStream = new ByteArrayInputStream((
+				"Larry\n" +
+						"Dog\n" +
+						"Mut\n" +
+						"Likes to lick.\n"
+		).getBytes());
+
+		System.setIn(inputStream);
+		Scanner scanner = new Scanner(System.in);
+		scanner.useDelimiter("[\n]");
+
+		MenuService menuService = new MenuService(scanner);
+
+		menuService.updateAnimal(animal);
 
 
-
+		assertThat(outputStream.toString(),containsString("Name [Bob]:"));
+		assertThat(outputStream.toString(),containsString("Species [Cat]:"));
+		assertThat(outputStream.toString(),containsString("Breed []:"));
+		assertThat(outputStream.toString(),containsString("Description [Likes to eat.]:"));
+		assertThat(animal.getName(),equalTo("Larry"));
+		assertThat(animal.getSpecies(),equalTo("Dog"));
+		assertThat(animal.getBreed(),equalTo("Mut"));
+		assertThat(animal.getDescription(),equalTo("Likes to lick."));
+	}
 
 }
