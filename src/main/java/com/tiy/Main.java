@@ -12,23 +12,17 @@ public class Main {
     public static String jdbcURL;
 
     public static void main(String[] args) {
-        if(args !=null){
-            jdbcURL = args[0];
-        }else{
-            jdbcURL ="jdbc:postgresql://localhost:5432/animalshelter";
-        }
 
-        AnimalRepository repository = new AnimalRepository(jdbcURL);
         Scanner scanner = new Scanner(System.in);
         scanner.useDelimiter("[\n]");
-
+        AnimalService service = new AnimalService();
         MenuService menuService = new MenuService(scanner);
         while(true){
 
             int userChoice = menuService.promptForMainMenu();
 
             if(userChoice== menuService.LIST_ANIMALS){
-                menuService.listAnimals(repository.listAnimals());
+                menuService.listAnimals(service.getAnimals());
                // menuService.pause();
             }else if(userChoice == menuService.CREATE_ANIMAL){
                 System.out.println("\n-- Create Animal --\n");
@@ -41,32 +35,28 @@ public class Main {
                         menuService.waitForString("Description: ",true),
                         LocalDate.now()
                         );
-                if(repository.addAnimal(animal) > 0){
-                    System.out.println("\n" +
-                            "Success: The animal has been created!");
-                }else{
-                    System.out.println("\n" +
-                            "Failed to create Animal");
-                }
+                service.addAnimal(animal);
+                    System.out.println("\nSuccess: The animal has been created!");
+
             }else if(userChoice ==menuService.VIEW_ANIMAL){
-                Animal animal =  menuService.promptSearchForAnimal("View Details Menu",repository.listAnimals());
+                Animal animal =  menuService.promptSearchForAnimal("View Details Menu",service.getAnimals());
                 menuService.showDetailsOfAnimal(animal);
                // menuService.pause();
 
             }
             else if(userChoice==menuService.EDIT_ANIMAL){
-                Animal animal =  menuService.promptSearchForAnimal("Edit Animal",repository.listAnimals());
+                Animal animal =  menuService.promptSearchForAnimal("Edit Animal",service.getAnimals());
                 menuService.updateAnimal(animal);
                 menuService.showDetailsOfAnimal(animal);
-                repository.updateAnimal(animal);
+                service.updateAnimal(animal);
                 menuService.pause();
             }
             else if(userChoice==menuService.DELETE_ANIMAL){
-                Animal animal =  menuService.promptSearchForAnimal("Delete an Animal",repository.listAnimals());
+                Animal animal =  menuService.promptSearchForAnimal("Delete an Animal",service.getAnimals());
                 menuService.showDetailsOfAnimal(animal);
                 //ask if you are sure you want to delete the animal
                 if(menuService.isYesOrNo("%nAre you sure you want to delete this animal?: ")){
-                    repository.deleteAnimal(animal);
+                    service.deleteAnimal(animal);
                     System.out.println("\nSuccess: The animal has been deleted!\n");
                 }
             }else if(userChoice==menuService.QUIT){

@@ -97,17 +97,20 @@ public class AnimalRepository {
 					"    "+animal.getAge()+",\n" +
 					"    '"+animal.getDescription()+"',\n" +
 					"    now(),\n" +
-					"    (SELECT id FROM gender WHERE lower(gender_type)='"+animal.getGender().toLowerCase()+"')\n" +
+					"    (SELECT id FROM gender WHERE lower(gender_type)=?)\n" +
 					");");
-			response += prestmt.executeUpdate();
+			prestmt.setString(1,animal.getGender().toLowerCase());
+			prestmt.executeUpdate();
 			//could be removed in future when in the web
 			checkForSpecies(animal.getSpecies());
 			//could be removed in future when in the web
 			checkForBreed(animal.getBreed(),animal.getSpecies());
 
 			prestmt = conn.prepareStatement("INSERT INTO animal_type (animal_id, breed_id) VALUES (" +
-					"(SELECT id FROM animal where lower(animal_name)='"+animal.getName().toLowerCase()+"')," +
-					"(SELECT id FROM breed where lower(breed_type)='"+animal.getBreed().toLowerCase()+"'));");
+					"(SELECT id FROM animal where lower(animal_name)=?)," +
+					"(SELECT id FROM breed where lower(breed_type)=?));");
+			prestmt.setString(1,animal.getName().toLowerCase());
+			prestmt.setString(2,animal.getBreed().toLowerCase());
 			response += prestmt.executeUpdate();
 
 		}catch (SQLException sqle){
@@ -142,7 +145,8 @@ public class AnimalRepository {
 	public boolean checkForBreed(String breed,String species){
 		boolean breedExists = false;
 		try{
-			prestmt = conn.prepareStatement("SELECT id FROM breed WHERE lower(breed_type)=lower('"+breed+"')");
+			prestmt = conn.prepareStatement("SELECT id FROM breed WHERE lower(breed_type)=?");
+			prestmt.setString(1,breed.toLowerCase());
 			rs = prestmt.executeQuery();
 
 				if(rs.isBeforeFirst()) {
