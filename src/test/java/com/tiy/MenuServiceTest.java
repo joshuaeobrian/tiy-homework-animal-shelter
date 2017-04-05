@@ -257,7 +257,7 @@ public class MenuServiceTest {
 		Scanner scanner = new Scanner(input);
 		MenuService menuService = new MenuService(scanner);
 		ArrayList<Animal> animals = new ArrayList<>();
-		animals.add(new Animal(0,"Bob",
+		animals.add(new Animal(1,"Bob",
 				"Cat",
 				"na",2,
 				"","Just really fat",null));
