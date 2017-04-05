@@ -9,13 +9,17 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static ArrayList<Animal> animals = new ArrayList<>();
-    private static String jdbcURL = "jdbc:postgresql://localhost:5432/animalshelter";
+    public static String jdbcURL;
 
     public static void main(String[] args) {
+        if(args !=null){
+            jdbcURL = args[0];
+        }else{
+            jdbcURL ="jdbc:postgresql://localhost:5432/animalshelter";
+        }
 
         AnimalRepository repository = new AnimalRepository(jdbcURL);
-       Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         scanner.useDelimiter("[\n]");
 
         MenuService menuService = new MenuService(scanner);
@@ -25,7 +29,7 @@ public class Main {
 
             if(userChoice== menuService.LIST_ANIMALS){
                 menuService.listAnimals(repository.listAnimals());
-                menuService.pause();
+               // menuService.pause();
             }else if(userChoice == menuService.CREATE_ANIMAL){
                 System.out.println("\n-- Create Animal --\n");
                 System.out.println("\nPlease answer the following questions.\n");
@@ -47,7 +51,7 @@ public class Main {
             }else if(userChoice ==menuService.VIEW_ANIMAL){
                 Animal animal =  menuService.promptSearchForAnimal("View Details Menu",repository.listAnimals());
                 menuService.showDetailsOfAnimal(animal);
-                menuService.pause();
+               // menuService.pause();
 
             }
             else if(userChoice==menuService.EDIT_ANIMAL){

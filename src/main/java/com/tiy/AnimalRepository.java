@@ -18,8 +18,8 @@ public class AnimalRepository {
 		try{
 			this.conn = DriverManager.getConnection(conn);
 
-		}catch (Exception e){
-
+		}catch (SQLException e){
+			e.printStackTrace();
 		}
 
 	}
