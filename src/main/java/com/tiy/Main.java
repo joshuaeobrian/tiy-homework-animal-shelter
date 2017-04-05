@@ -1,15 +1,8 @@
 package com.tiy;
 
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-
-    public static String jdbcURL;
 
     public static void main(String[] args) {
 
@@ -23,31 +16,19 @@ public class Main {
 
             if(userChoice== menuService.LIST_ANIMALS){
                 menuService.listAnimals(service.getAnimals());
-               // menuService.pause();
+                menuService.pause();
             }else if(userChoice == menuService.CREATE_ANIMAL){
-                System.out.println("\n-- Create Animal --\n");
-                System.out.println("\nPlease answer the following questions.\n");
-                Animal animal = new Animal(0,menuService.waitForString("Animal Name: ",true),
-                        menuService.waitForString("Species: ",true),
-                        menuService.waitForString("Breed (optional): ",false),
-                        menuService.waitForInt("Age: "),
-                        menuService.waitForString("Gender: ",true),
-                        menuService.waitForString("Description: ",true),
-                        LocalDate.now()
-                        );
-                service.addAnimal(animal);
-                    System.out.println("\nSuccess: The animal has been created!");
+
+                service.addAnimal(menuService.createAnimal());
 
             }else if(userChoice ==menuService.VIEW_ANIMAL){
                 Animal animal =  menuService.promptSearchForAnimal("View Details Menu",service.getAnimals());
                 menuService.showDetailsOfAnimal(animal);
-               // menuService.pause();
-
+                menuService.pause();
             }
             else if(userChoice==menuService.EDIT_ANIMAL){
                 Animal animal =  menuService.promptSearchForAnimal("Edit Animal",service.getAnimals());
-                menuService.updateAnimal(animal);
-                menuService.showDetailsOfAnimal(animal);
+                menuService.showDetailsOfAnimal(menuService.updateAnimal(animal));
                 service.updateAnimal(animal);
                 menuService.pause();
             }

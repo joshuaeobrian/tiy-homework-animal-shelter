@@ -26,6 +26,10 @@ public class MenuService {
 		this.scanner = scanner;
 	}
 
+	/**
+	 * main menu prompt
+	 * @return
+	 */
 	public int promptForMainMenu(){
 		System.out.println("\n-- Main Menu --\n" +
 				"\n" +
@@ -48,6 +52,13 @@ public class MenuService {
 			return scanner.nextInt();
 		}
 	}
+
+	/**
+	 * menu for how you would like to search animal
+	 * @param menuHeader
+	 * @param animals
+	 * @return
+	 */
 	public Animal promptSearchForAnimal(String menuHeader,ArrayList<Animal> animals){
 		System.out.printf("%n%n-- %s --%n"+
 				"%n1) Lookup by ID" +
@@ -65,6 +76,12 @@ public class MenuService {
 		return animal;
 	}
 
+	/**
+	 * allows you to search by name and id
+	 * @param animals
+	 * @param prompt
+	 * @return animal
+	 */
 	public Animal viewAnimalByName(ArrayList<Animal>animals,String prompt){
 
 		int animalCount=0;
@@ -86,6 +103,12 @@ public class MenuService {
 		}
 	}
 
+	/**
+	 * returns a string on if it is requires or not
+	 * @param prompt
+	 * @param required
+	 * @return string
+	 */
 	public String waitForString(String prompt, boolean required) {
 		System.out.printf(prompt);
 		String input = scanner.next();
@@ -97,6 +120,11 @@ public class MenuService {
 		}
 	}
 
+	/**
+	 * validates yes or no
+	 * @param prompt
+	 * @return boolean
+	 */
 	public boolean isYesOrNo(String prompt) {
 		String response = waitForString(prompt,false);
 		if(response.toLowerCase().equals("y")||response.toLowerCase().equals("yes")){
@@ -109,6 +137,10 @@ public class MenuService {
 		}
 	}
 
+	/**
+	 * lists all animals in a array
+	 * @param animals
+	 */
 	public void listAnimals(ArrayList<Animal> animals) {
 		System.out.println("\n-- List Animals --\n");
 		for(int index = 0; index < animals.size();index++){
@@ -118,6 +150,10 @@ public class MenuService {
 		}
 	}
 
+	/**
+	 * Displays details of a animal
+	 * @param animal
+	 */
 	public void showDetailsOfAnimal(Animal animal) {
 		System.out.println();
 		System.out.format(textAlign,"Name:",animal.getName());
@@ -126,6 +162,12 @@ public class MenuService {
 		System.out.format(textAlign,"Description:",animal.getDescription());
 
 	}
+
+	/**
+	 * Updates animal takes an animal as a arg
+	 * @param animal
+	 * @return updated animal
+	 */
 	public Animal updateAnimal(Animal animal){
 
 		String input = "";
@@ -147,6 +189,27 @@ public class MenuService {
 		}
 		return animal;
 	}
+
+	/**
+	 * creates a new animal object
+	 * @return an animal
+	 */
+	public Animal createAnimal(){
+		System.out.println("\n-- Create Animal --\n");
+		System.out.println("\nPlease answer the following questions.\n");
+		Animal animal = new Animal(-1,waitForString("Animal Name: ",true),
+				waitForString("Species: ",true),
+				waitForString("Breed (optional): ",false),
+				waitForInt("Age: "),
+				waitForString("Gender: ",true),
+				waitForString("Description: ",true),
+				LocalDate.now()
+		);
+		System.out.println("\nSuccess: The animal has been created!");
+
+		return animal;
+	}
+
 	public void pause(){
 		waitForString("Press ENTER when ready to continue...",false);
 	}
