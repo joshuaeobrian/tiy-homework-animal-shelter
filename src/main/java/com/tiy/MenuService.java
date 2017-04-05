@@ -50,12 +50,21 @@ public class MenuService {
 			return scanner.nextInt();
 		}
 	}
-	public int promptSearchMenu(String menuHeader){
+	public Animal promptSearchForAnimal(String menuHeader,ArrayList<Animal> animals){
 		System.out.printf("%n%n-- %s --%n"+
 				"%n1) Lookup by ID" +
 				"%n2) Lookup by Name%n",menuHeader);
-
-		return waitForInt("Please choose an option: ");
+		Animal animal = null;
+		int response  = waitForInt("Please choose an option: ");
+		if(response == SEARCH_BY_ID){
+			animal = animals.get(waitForInt("What is the numeric ID of the animal you want to view?: "));
+		}else if(response == SEARCH_BY_NAME){
+			animal = viewAnimalByName(animals,"%nPlease enter a name you would like to search: ");
+		}else{
+			System.out.println("Sorry, invalid option. Try again...");
+			return promptSearchForAnimal(menuHeader, animals);
+		}
+		return animal;
 	}
 
 	public Animal viewAnimalByName(ArrayList<Animal>animals,String prompt){
@@ -66,7 +75,7 @@ public class MenuService {
 			Animal animal = animals.get(i);
 			if(name.toLowerCase().equals(animal.getName().toLowerCase())){
 				animalCount++;
-				System.out.format(textAlign,(i+1)+") "+animal.getName(),animal.getSpecies());
+				System.out.format(textAlign,animal.getId()+") "+animal.getName(),animal.getSpecies());
 			}
 		}
 
@@ -105,7 +114,8 @@ public class MenuService {
 	public void listAnimals(ArrayList<Animal> animals) {
 		System.out.println("\n-- List Animals --\n");
 		for(int index = 0; index < animals.size();index++){
-			System.out.format(textAlign,(index+1)+") "+animals.get(index).getName(),animals.get(index).getSpecies());
+			Animal animal = animals.get(index);
+			System.out.format(textAlign,animal.getId()+") "+animal.getName(), animal.getSpecies());
 
 		}
 	}
@@ -118,7 +128,7 @@ public class MenuService {
 		System.out.format(textAlign,"Description:",animal.getDescription());
 
 	}
-	public void updateAnimal(Animal animal){
+	public Animal updateAnimal(Animal animal){
 
 		String input = "";
 		input = waitForString(String.format("Name [%s]: ",animal.getName()),false);
@@ -137,6 +147,7 @@ public class MenuService {
 		if(!input.isEmpty()){
 			animal.setDescription(input);
 		}
+		return animal;
 	}
 	public void pause(){
 		waitForString("Press ENTER when ready to continue...",false);
