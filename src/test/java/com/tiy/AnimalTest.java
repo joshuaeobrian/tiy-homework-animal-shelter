@@ -2,6 +2,8 @@ package com.tiy;
 
 import org.junit.Test;
 
+import java.time.LocalDate;
+
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
@@ -33,8 +35,8 @@ public class AnimalTest {
 	@Test
 	public void creationOfAnimalBreed() throws Exception {
 
-		Animal animal = new Animal(0,"Bob", "Cat", "",2,"","exceptional breed",null);
-		assertThat(animal.getBreed().toLowerCase(), equalTo("exceptional breed"));
+		Animal animal = new Animal(0,"Bob", "Cat", "exceptional breed",2,"Male","", LocalDate.now());
+		assertThat(animal.getBreed(), equalTo("exceptional breed"));
 	}
 
 	@Test
