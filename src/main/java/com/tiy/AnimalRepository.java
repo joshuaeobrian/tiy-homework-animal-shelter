@@ -23,7 +23,11 @@ public class AnimalRepository {
 		}
 
 	}
-	//returns an array list of animals in the database
+
+	/**
+	 * get a list of animals in the database
+	 * @return
+	 */
 	public ArrayList<Animal> listAnimals(){
 		ArrayList<Animal> animals = new ArrayList<>();
 		try{
@@ -55,7 +59,12 @@ public class AnimalRepository {
 
 		return animals;
 	}
-	//gets animal by name will be for spring
+
+	/**
+	 * gets animal
+	 * @param name
+	 * @return
+	 */
 	public Animal getAnimalByName(String name) {
 		Animal animal = null;
 		try{
@@ -88,7 +97,11 @@ public class AnimalRepository {
 		return animal;
 	}
 
-	//Adds animal to database
+	/**
+	 * adds animal to database
+	 * @param animal
+	 * @return
+	 */
 	public int addAnimal(Animal animal){
 		int response = 0;
 		try {
@@ -97,17 +110,20 @@ public class AnimalRepository {
 					"    "+animal.getAge()+",\n" +
 					"    '"+animal.getDescription()+"',\n" +
 					"    now(),\n" +
-					"    (SELECT id FROM gender WHERE lower(gender_type)='"+animal.getGender().toLowerCase()+"')\n" +
+					"    (SELECT id FROM gender WHERE lower(gender_type)=?)\n" +
 					");");
-			response += prestmt.executeUpdate();
+			prestmt.setString(1,animal.getGender().toLowerCase());
+			prestmt.executeUpdate();
 			//could be removed in future when in the web
 			checkForSpecies(animal.getSpecies());
 			//could be removed in future when in the web
 			checkForBreed(animal.getBreed(),animal.getSpecies());
 
 			prestmt = conn.prepareStatement("INSERT INTO animal_type (animal_id, breed_id) VALUES (" +
-					"(SELECT id FROM animal where lower(animal_name)='"+animal.getName().toLowerCase()+"')," +
-					"(SELECT id FROM breed where lower(breed_type)='"+animal.getBreed().toLowerCase()+"'));");
+					"(SELECT id FROM animal where lower(animal_name)=?)," +
+					"(SELECT id FROM breed where lower(breed_type)=?));");
+			prestmt.setString(1,animal.getName().toLowerCase());
+			prestmt.setString(2,animal.getBreed().toLowerCase());
 			response += prestmt.executeUpdate();
 
 		}catch (SQLException sqle){
@@ -117,7 +133,11 @@ public class AnimalRepository {
 		return response;
 	}
 
-	//check to see if species exist
+	/**
+	 * valids species
+	 * @param species
+	 * @return
+	 */
 	public boolean checkForSpecies(String species){
 		boolean specieExists = false;
 		try{
@@ -139,10 +159,17 @@ public class AnimalRepository {
 		return specieExists;
 	}
 
+	/**
+	 * Validates breed
+	 * @param breed
+	 * @param species
+	 * @return
+	 */
 	public boolean checkForBreed(String breed,String species){
 		boolean breedExists = false;
 		try{
-			prestmt = conn.prepareStatement("SELECT id FROM breed WHERE lower(breed_type)=lower('"+breed+"')");
+			prestmt = conn.prepareStatement("SELECT id FROM breed WHERE lower(breed_type)=?");
+			prestmt.setString(1,breed.toLowerCase());
 			rs = prestmt.executeQuery();
 
 				if(rs.isBeforeFirst()) {
@@ -161,7 +188,11 @@ public class AnimalRepository {
 
 		return breedExists;
 	}
-	//updates animal
+
+	/**
+	 * updates animal
+	 * @param animal
+	 */
 	public void updateAnimal(Animal animal){
 		try {
 			prestmt = conn.prepareStatement("UPDATE animal SET " +
@@ -182,7 +213,10 @@ public class AnimalRepository {
 			sqle.printStackTrace();
 		}
 	}
-	//for website use
+	/**
+	 * sets animal to be visible
+	 * @param animal
+	 */
 	public void setAnimalVisiblitiy(Animal animal){
 		try {
 			prestmt = conn.prepareStatement("UPDATE animal SET " +
@@ -192,7 +226,10 @@ public class AnimalRepository {
 			sqle.printStackTrace();
 		}
 	}
-	//deletes animal
+	/**
+	 * deletes animal
+	 * @param animal
+	 */
 	public void deleteAnimal(Animal animal){
 		try {
 
@@ -208,6 +245,12 @@ public class AnimalRepository {
 		}
 
 	}
+
+	/**
+	 * gets list of species
+	 * @return
+	 * @throws SQLException
+	 */
 	public ArrayList<String> getListOfSpecies() throws SQLException {
 		ArrayList<String> species = new ArrayList<>();
 		stmt = conn.createStatement();
@@ -218,6 +261,11 @@ public class AnimalRepository {
 		return species;
 	}
 
+	/**
+	 * gets list of breeds based on species
+	 * @param species
+	 * @return
+	 */
 	public ArrayList<String> getListOfBreedsOfSpeciesType(String species){
 		ArrayList<String> breeds = new ArrayList<>();
 		try {
