@@ -161,14 +161,14 @@ public class AnimalRepository {
 
 		return breedExists;
 	}
-		//TODO Finish
+	//updates animal
 	public void updateAnimal(Animal animal){
 		try {
 			prestmt = conn.prepareStatement("UPDATE animal SET " +
 					" animal_name='"+animal.getName()+"'," +
 					" age='"+animal.getAge()+"'," +
 					" description='"+animal.getDescription()+"'," +
-					"gender_id=(SELECT id from gender where lower(gender_type)='"+animal.getGender()+"')" +
+					"gender_id=(SELECT id from gender where lower(gender_type)='"+animal.getGender().toLowerCase()+"')" +
 					"WHERE id="+animal.getId()+"");
 			prestmt.executeUpdate();
 			checkForSpecies(animal.getSpecies());

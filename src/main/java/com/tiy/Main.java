@@ -12,12 +12,8 @@ public class Main {
     public static ArrayList<Animal> animals = new ArrayList<>();
     private static String jdbcURL = "jdbc:postgresql://localhost:5432/animalshelter";
 
-
     public static void main(String[] args) {
-//        animals.addAll(Arrays.asList(
-//                new Animal(0,"Bob","Cat","",12,"",null),
-//                new Animal(0,"Larry","Dog","",3,"",null),
-//                new Animal(0,"Mo","Cat","",3,"",null)));
+
         AnimalRepository repository = new AnimalRepository(jdbcURL);
        Scanner scanner = new Scanner(System.in);
         scanner.useDelimiter("[\n]");

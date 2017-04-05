@@ -11,7 +11,6 @@ import java.util.Scanner;
  */
 public class MenuService {
 
-
 	public static final int LIST_ANIMALS = 1;
 	public static final int CREATE_ANIMAL = 2;
 	public static final int VIEW_ANIMAL = 3;
@@ -21,7 +20,6 @@ public class MenuService {
 	public static final int SEARCH_BY_ID = 1;
 	public static final int SEARCH_BY_NAME = 2;
 	private String textAlign = " %-15s  %-9s %n";
-
 	private Scanner scanner;
 
 	public MenuService(Scanner scanner) {
@@ -57,7 +55,7 @@ public class MenuService {
 		Animal animal = null;
 		int response  = waitForInt("Please choose an option: ");
 		if(response == SEARCH_BY_ID){
-			animal = animals.get(waitForInt("What is the numeric ID of the animal you want to view?: "));
+			animal = animals.get(waitForInt("What is the numeric ID of the animal you want to view?: ")-1);
 		}else if(response == SEARCH_BY_NAME){
 			animal = viewAnimalByName(animals,"%nPlease enter a name you would like to search: ");
 		}else{

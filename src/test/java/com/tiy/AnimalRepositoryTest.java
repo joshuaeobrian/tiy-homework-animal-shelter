@@ -129,8 +129,8 @@ public class AnimalRepositoryTest {
 		assertThat(repository.getAnimalByName("bob").getId(),equalTo(3));
 		assertThat(repository.getAnimalByName("bob").getName(),equalTo("Bob"));
 		assertThat(repository.getAnimalByName("bob").getSpecies(),equalTo("Cat"));
-//		assertThat(repository.getAnimalByName("bob").getBreed(),equalTo("Maine Coon"));
 
+		animal = repository.getAnimalByName("bob");
 		animal.setName("Larry");
 		animal.setSpecies("Dog");
 		animal.setBreed("Wolfing kind");
@@ -141,9 +141,9 @@ public class AnimalRepositoryTest {
 		assertThat(repository.getAnimalByName("Larry").getId(),equalTo(3));
 		assertThat(repository.getAnimalByName("Larry").getName(),equalTo("Larry"));
 		assertThat(repository.getAnimalByName("Larry").getSpecies(),equalTo("Dog"));
-		assertThat(repository.getAnimalByName("Larry").getBreed(),equalTo("Wolfing kind"));
+
 		assertThat(repository.getAnimalByName("Larry").getAge(),equalTo(6));
-//		assertThat(repository.getAnimalByName("Larry").getDescription(),equalTo("Loves to run"));
+		assertThat(repository.getAnimalByName("Larry").getDescription(),equalTo("Loves to run"));
 
 	}
 

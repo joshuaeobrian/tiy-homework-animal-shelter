@@ -24,7 +24,7 @@ CREATE UNIQUE INDEX breed_breed_type_unique ON breed(breed_type);
 
 
 INSERT INTO breed(breed_type, species_id)VALUES (
-    'Maine coon',
+    'Maine Coon',
     (Select id from species where species_type='Cat')
 );
 --creates animal
@@ -79,7 +79,7 @@ INSERT INTO animal(animal_name, age, description, receive_date, gender_id) VALUE
 );
 INSERT INTO animal_type(animal_id, breed_id)VALUES (
     (SELECT id FROM animal where animal_name='Pablo'),
-    (select id from breed where breed_type='Maine coon')
+    (select id from breed where breed_type='Maine Coon')
 );
 
 INSERT INTO animal(animal_name, age, description, receive_date, gender_id) VALUES (
@@ -91,5 +91,5 @@ INSERT INTO animal(animal_name, age, description, receive_date, gender_id) VALUE
 );
 INSERT INTO animal_type(animal_id, breed_id)VALUES (
     (SELECT id FROM animal where animal_name='Leo'),
-    (select id from breed where breed_type='Maine coon')
+    (select id from breed where breed_type='Maine Coon')
 );
