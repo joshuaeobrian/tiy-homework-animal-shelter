@@ -1,0 +1,300 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: MenuService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.tiy</a> ]
+</div>
+
+<h1>Coverage Summary for Class: MenuService (com.tiy)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">MenuService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (12/ 12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    86.9%
+  </span>
+  <span class="absValue">
+    (73/ 84)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.tiy;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import java.time.LocalDate;
+<i>4</i>&nbsp;import java.util.ArrayList;
+<i>5</i>&nbsp;import java.util.HashMap;
+<i>6</i>&nbsp;import java.util.Iterator;
+<i>7</i>&nbsp;import java.util.Scanner;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;/**
+<i>10</i>&nbsp; * Created by josh on 3/24/17.
+<i>11</i>&nbsp; */
+<i>12</i>&nbsp;public class MenuService {
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;	public static final int LIST_ANIMALS = 1;
+<i>15</i>&nbsp;	public static final int CREATE_ANIMAL = 2;
+<i>16</i>&nbsp;	public static final int VIEW_ANIMAL = 3;
+<i>17</i>&nbsp;	public static final int EDIT_ANIMAL = 4;
+<i>18</i>&nbsp;	public static final int DELETE_ANIMAL = 5;
+<i>19</i>&nbsp;	public static final int QUIT = 6;
+<i>20</i>&nbsp;	public static final int SEARCH_BY_ID = 1;
+<i>21</i>&nbsp;	public static final int SEARCH_BY_NAME = 2;
+<b class="fc"><i>22</i>&nbsp;	private String textAlign = &quot; %-15s  %-9s %n&quot;;</b>
+<i>23</i>&nbsp;	private Scanner scanner;
+<i>24</i>&nbsp;
+<b class="fc"><i>25</i>&nbsp;	public MenuService(Scanner scanner) {</b>
+<b class="fc"><i>26</i>&nbsp;		this.scanner = scanner;</b>
+<b class="fc"><i>27</i>&nbsp;	}</b>
+<i>28</i>&nbsp;
+<i>29</i>&nbsp;	/**
+<i>30</i>&nbsp;	 * main menu prompt
+<i>31</i>&nbsp;	 * @return
+<i>32</i>&nbsp;	 */
+<i>33</i>&nbsp;	public int promptForMainMenu(){
+<b class="fc"><i>34</i>&nbsp;		System.out.println(&quot;\n-- Main Menu --\n&quot; +</b>
+<i>35</i>&nbsp;				&quot;\n&quot; +
+<i>36</i>&nbsp;				&quot; 1) List animals\n&quot; +
+<i>37</i>&nbsp;				&quot; 2) Create an animal\n&quot; +
+<i>38</i>&nbsp;				&quot; 3) View animal details\n&quot; +
+<i>39</i>&nbsp;				&quot; 4) Edit an animal\n&quot; +
+<i>40</i>&nbsp;				&quot; 5) Delete an animal\n&quot; +
+<i>41</i>&nbsp;				&quot; 6) Quit&quot;);
+<b class="fc"><i>42</i>&nbsp;		return waitForInt(&quot;Please choose an option: &quot;);</b>
+<i>43</i>&nbsp;	}
+<i>44</i>&nbsp;
+<i>45</i>&nbsp;	public int waitForInt(String prompt) {
+<b class="fc"><i>46</i>&nbsp;		System.out.printf(&quot;%n%s&quot;,prompt);</b>
+<b class="fc"><i>47</i>&nbsp;		if(!scanner.hasNextInt()){</b>
+<b class="nc"><i>48</i>&nbsp;			String badInput = scanner.next();</b>
+<b class="nc"><i>49</i>&nbsp;			System.out.printf(&quot;%nSorry, %s is a invalid option.&quot;,badInput);</b>
+<b class="nc"><i>50</i>&nbsp;			return waitForInt(prompt);</b>
+<i>51</i>&nbsp;		}else{
+<b class="fc"><i>52</i>&nbsp;			return scanner.nextInt();</b>
+<i>53</i>&nbsp;		}
+<i>54</i>&nbsp;	}
+<i>55</i>&nbsp;
+<i>56</i>&nbsp;	/**
+<i>57</i>&nbsp;	 * menu for how you would like to search animal
+<i>58</i>&nbsp;	 * @param menuHeader
+<i>59</i>&nbsp;	 * @param animals
+<i>60</i>&nbsp;	 * @return
+<i>61</i>&nbsp;	 */
+<i>62</i>&nbsp;	public Animal promptSearchForAnimal(String menuHeader,ArrayList&lt;Animal&gt; animals){
+<b class="fc"><i>63</i>&nbsp;		System.out.printf(&quot;%n%n-- %s --%n&quot;+</b>
+<i>64</i>&nbsp;				&quot;%n1) Lookup by ID&quot; +
+<i>65</i>&nbsp;				&quot;%n2) Lookup by Name%n&quot;,menuHeader);
+<b class="fc"><i>66</i>&nbsp;		Animal animal = null;</b>
+<b class="fc"><i>67</i>&nbsp;		int response  = waitForInt(&quot;Please choose an option: &quot;);</b>
+<b class="fc"><i>68</i>&nbsp;		if(response == SEARCH_BY_ID){</b>
+<b class="fc"><i>69</i>&nbsp;			animal = animals.get(waitForInt(&quot;What is the numeric ID of the animal you want to view?: &quot;)-1);</b>
+<b class="fc"><i>70</i>&nbsp;		}else if(response == SEARCH_BY_NAME){</b>
+<b class="fc"><i>71</i>&nbsp;			animal = viewAnimalByName(animals,&quot;%nPlease enter a name you would like to search: &quot;);</b>
+<i>72</i>&nbsp;		}else{
+<b class="nc"><i>73</i>&nbsp;			System.out.println(&quot;Sorry, invalid option. Try again...&quot;);</b>
+<b class="nc"><i>74</i>&nbsp;			return promptSearchForAnimal(menuHeader, animals);</b>
+<i>75</i>&nbsp;		}
+<b class="fc"><i>76</i>&nbsp;		return animal;</b>
+<i>77</i>&nbsp;	}
+<i>78</i>&nbsp;
+<i>79</i>&nbsp;	/**
+<i>80</i>&nbsp;	 * allows you to search by name and id
+<i>81</i>&nbsp;	 * @param animals
+<i>82</i>&nbsp;	 * @param prompt
+<i>83</i>&nbsp;	 * @return animal
+<i>84</i>&nbsp;	 */
+<i>85</i>&nbsp;	public Animal viewAnimalByName(ArrayList&lt;Animal&gt;animals,String prompt){
+<i>86</i>&nbsp;
+<b class="fc"><i>87</i>&nbsp;		int animalCount=0;</b>
+<b class="fc"><i>88</i>&nbsp;		String name = waitForString(prompt,false);</b>
+<b class="fc"><i>89</i>&nbsp;		for(int i = 0; i &lt; animals.size();i++){</b>
+<b class="fc"><i>90</i>&nbsp;			Animal animal = animals.get(i);</b>
+<b class="fc"><i>91</i>&nbsp;			if(name.toLowerCase().equals(animal.getName().toLowerCase())){</b>
+<b class="fc"><i>92</i>&nbsp;				animalCount++;</b>
+<b class="fc"><i>93</i>&nbsp;				System.out.format(textAlign,animal.getId()+&quot;) &quot;+animal.getName(),animal.getSpecies());</b>
+<i>94</i>&nbsp;			}
+<i>95</i>&nbsp;		}
+<i>96</i>&nbsp;
+<b class="fc"><i>97</i>&nbsp;		if(animalCount == 0){</b>
+<b class="nc"><i>98</i>&nbsp;			System.out.println(&quot;Sorry, there are no animals with that name.\nPlease try again...&quot;);</b>
+<b class="nc"><i>99</i>&nbsp;			return viewAnimalByName(animals,waitForString(prompt,true));</b>
+<i>100</i>&nbsp;		}else{
+<i>101</i>&nbsp;
+<b class="fc"><i>102</i>&nbsp;			return animals.get(waitForInt(&quot;What is the numeric ID of the animal you want to view?: &quot;)-1);</b>
+<i>103</i>&nbsp;		}
+<i>104</i>&nbsp;	}
+<i>105</i>&nbsp;
+<i>106</i>&nbsp;	/**
+<i>107</i>&nbsp;	 * returns a string on if it is requires or not
+<i>108</i>&nbsp;	 * @param prompt
+<i>109</i>&nbsp;	 * @param required
+<i>110</i>&nbsp;	 * @return string
+<i>111</i>&nbsp;	 */
+<i>112</i>&nbsp;	public String waitForString(String prompt, boolean required) {
+<b class="fc"><i>113</i>&nbsp;		System.out.printf(prompt);</b>
+<b class="fc"><i>114</i>&nbsp;		String input = scanner.next();</b>
+<b class="fc"><i>115</i>&nbsp;		if(required &amp;&amp; input.isEmpty()){</b>
+<b class="nc"><i>116</i>&nbsp;			System.out.println(&quot;This field must be filled out...&quot;);</b>
+<b class="nc"><i>117</i>&nbsp;			return waitForString(prompt,required);</b>
+<i>118</i>&nbsp;		}else{
+<b class="fc"><i>119</i>&nbsp;			return input;</b>
+<i>120</i>&nbsp;		}
+<i>121</i>&nbsp;	}
+<i>122</i>&nbsp;
+<i>123</i>&nbsp;	/**
+<i>124</i>&nbsp;	 * validates yes or no
+<i>125</i>&nbsp;	 * @param prompt
+<i>126</i>&nbsp;	 * @return boolean
+<i>127</i>&nbsp;	 */
+<i>128</i>&nbsp;	public boolean isYesOrNo(String prompt) {
+<b class="fc"><i>129</i>&nbsp;		String response = waitForString(prompt,false);</b>
+<b class="fc"><i>130</i>&nbsp;		if(response.toLowerCase().equals(&quot;y&quot;)||response.toLowerCase().equals(&quot;yes&quot;)){</b>
+<b class="fc"><i>131</i>&nbsp;			return true;</b>
+<b class="fc"><i>132</i>&nbsp;		}else if(response.toLowerCase().equals(&quot;n&quot;)||response.toLowerCase().equals(&quot;no&quot;)){</b>
+<b class="fc"><i>133</i>&nbsp;			return false;</b>
+<i>134</i>&nbsp;		}else{
+<b class="nc"><i>135</i>&nbsp;			System.out.printf(&quot;%n is a invalid option please type (yes/no or y/n).&quot;);</b>
+<b class="nc"><i>136</i>&nbsp;			return isYesOrNo(prompt);</b>
+<i>137</i>&nbsp;		}
+<i>138</i>&nbsp;	}
+<i>139</i>&nbsp;
+<i>140</i>&nbsp;	/**
+<i>141</i>&nbsp;	 * lists all animals in a array
+<i>142</i>&nbsp;	 * @param animals
+<i>143</i>&nbsp;	 */
+<i>144</i>&nbsp;	public void listAnimals(ArrayList&lt;Animal&gt; animals) {
+<b class="fc"><i>145</i>&nbsp;		System.out.println(&quot;\n-- List Animals --\n&quot;);</b>
+<b class="fc"><i>146</i>&nbsp;		for(int index = 0; index &lt; animals.size();index++){</b>
+<b class="fc"><i>147</i>&nbsp;			Animal animal = animals.get(index);</b>
+<b class="fc"><i>148</i>&nbsp;			System.out.format(textAlign,animal.getId()+&quot;) &quot;+animal.getName(), animal.getSpecies());</b>
+<i>149</i>&nbsp;
+<i>150</i>&nbsp;		}
+<b class="fc"><i>151</i>&nbsp;	}</b>
+<i>152</i>&nbsp;
+<i>153</i>&nbsp;	/**
+<i>154</i>&nbsp;	 * Displays details of a animal
+<i>155</i>&nbsp;	 * @param animal
+<i>156</i>&nbsp;	 */
+<i>157</i>&nbsp;	public void showDetailsOfAnimal(Animal animal) {
+<b class="fc"><i>158</i>&nbsp;		System.out.println();</b>
+<b class="fc"><i>159</i>&nbsp;		System.out.format(textAlign,&quot;Name:&quot;,animal.getName());</b>
+<b class="fc"><i>160</i>&nbsp;		System.out.format(textAlign,&quot;Species:&quot;,animal.getSpecies());</b>
+<b class="fc"><i>161</i>&nbsp;		System.out.format(textAlign,&quot;Breed:&quot;,animal.getBreed());</b>
+<b class="fc"><i>162</i>&nbsp;		System.out.format(textAlign,&quot;Description:&quot;,animal.getDescription());</b>
+<i>163</i>&nbsp;
+<b class="fc"><i>164</i>&nbsp;	}</b>
+<i>165</i>&nbsp;
+<i>166</i>&nbsp;	/**
+<i>167</i>&nbsp;	 * Updates animal takes an animal as a arg
+<i>168</i>&nbsp;	 * @param animal
+<i>169</i>&nbsp;	 * @return updated animal
+<i>170</i>&nbsp;	 */
+<i>171</i>&nbsp;	public Animal updateAnimal(Animal animal){
+<i>172</i>&nbsp;
+<b class="fc"><i>173</i>&nbsp;		String input = &quot;&quot;;</b>
+<b class="fc"><i>174</i>&nbsp;		input = waitForString(String.format(&quot;Name [%s]: &quot;,animal.getName()),false);</b>
+<b class="fc"><i>175</i>&nbsp;		if(!input.isEmpty()){</b>
+<b class="fc"><i>176</i>&nbsp;			animal.setName(input);</b>
+<i>177</i>&nbsp;		}
+<b class="fc"><i>178</i>&nbsp;		input = waitForString(String.format(&quot;Species [%s]: &quot;,animal.getSpecies()),false);</b>
+<b class="fc"><i>179</i>&nbsp;		if(!input.isEmpty()){</b>
+<b class="fc"><i>180</i>&nbsp;			animal.setSpecies(input);</b>
+<i>181</i>&nbsp;		}
+<b class="fc"><i>182</i>&nbsp;		input = waitForString(String.format(&quot;Breed [%s]: &quot;,animal.getBreed()),false);</b>
+<b class="fc"><i>183</i>&nbsp;		if(!input.isEmpty()){</b>
+<b class="fc"><i>184</i>&nbsp;			animal.setBreed(input);</b>
+<i>185</i>&nbsp;		}
+<b class="fc"><i>186</i>&nbsp;		input = waitForString(String.format(&quot;Description [%s]: &quot;,animal.getDescription()),false);</b>
+<b class="fc"><i>187</i>&nbsp;		if(!input.isEmpty()){</b>
+<b class="fc"><i>188</i>&nbsp;			animal.setDescription(input);</b>
+<i>189</i>&nbsp;		}
+<b class="fc"><i>190</i>&nbsp;		return animal;</b>
+<i>191</i>&nbsp;	}
+<i>192</i>&nbsp;
+<i>193</i>&nbsp;	/**
+<i>194</i>&nbsp;	 * creates a new animal object
+<i>195</i>&nbsp;	 * @return an animal
+<i>196</i>&nbsp;	 */
+<i>197</i>&nbsp;	public Animal createAnimal(){
+<b class="fc"><i>198</i>&nbsp;		System.out.println(&quot;\n-- Create Animal --\n&quot;);</b>
+<b class="fc"><i>199</i>&nbsp;		System.out.println(&quot;\nPlease answer the following questions.\n&quot;);</b>
+<b class="fc"><i>200</i>&nbsp;		Animal animal = new Animal(-1,waitForString(&quot;Animal Name: &quot;,true),</b>
+<b class="fc"><i>201</i>&nbsp;				waitForString(&quot;Species: &quot;,true),</b>
+<b class="fc"><i>202</i>&nbsp;				waitForString(&quot;Breed (optional): &quot;,false),</b>
+<b class="fc"><i>203</i>&nbsp;				waitForInt(&quot;Age: &quot;),</b>
+<b class="fc"><i>204</i>&nbsp;				waitForString(&quot;Gender: &quot;,true),</b>
+<b class="fc"><i>205</i>&nbsp;				waitForString(&quot;Description: &quot;,true),</b>
+<b class="fc"><i>206</i>&nbsp;				LocalDate.now()</b>
+<i>207</i>&nbsp;		);
+<b class="fc"><i>208</i>&nbsp;		System.out.println(&quot;\nSuccess: The animal has been created!&quot;);</b>
+<i>209</i>&nbsp;
+<b class="fc"><i>210</i>&nbsp;		return animal;</b>
+<i>211</i>&nbsp;	}
+<i>212</i>&nbsp;
+<i>213</i>&nbsp;	public void pause(){
+<b class="fc"><i>214</i>&nbsp;		waitForString(&quot;Press ENTER when ready to continue...&quot;,false);</b>
+<b class="fc"><i>215</i>&nbsp;	}</b>
+<i>216</i>&nbsp;}
+<i>217</i>&nbsp;
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2017-04-10 00:00</div>
+</div>
+</body>
+</html>

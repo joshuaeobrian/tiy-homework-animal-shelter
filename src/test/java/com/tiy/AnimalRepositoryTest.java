@@ -41,7 +41,7 @@ public class AnimalRepositoryTest {
 	}
 
 	@Test
-	public void checkCreationOfAnimal(){
+	public void checkCreationOfAnimal() throws SQLException {
 		Animal animal = new Animal(0,
 				"Bob",
 				"Cat",
@@ -58,14 +58,14 @@ public class AnimalRepositoryTest {
 
 	}
 	@Test
-	public void checkBreedExists(){
+	public void checkBreedExists() throws SQLException {
 		boolean r = repository.checkForBreed("WildCat","cat");
 		assertThat(r,equalTo(false));
 		r = repository.checkForBreed("Maine coon","cat");
 		assertThat(r,equalTo(true));
 	}
 	@Test
-	public void checkSpeciesExists(){
+	public void checkSpeciesExists() throws SQLException {
 		boolean r = repository.checkForSpecies("Monkey");
 		assertThat(r,equalTo(false));
 
@@ -74,7 +74,7 @@ public class AnimalRepositoryTest {
 	}
 
 	@Test
-	public void testShowAllAnimals(){
+	public void testShowAllAnimals() throws SQLException {
 		Animal animal = new Animal(0,
 				"Bob",
 				"Cat",
@@ -91,12 +91,12 @@ public class AnimalRepositoryTest {
 	}
 
 	@Test
-	public void testGetAnimalByName(){
+	public void testGetAnimalByName() throws SQLException {
 		assertThat(repository.getAnimalByName("leo").getName(),equalTo("Leo"));
 	}
 
 	@Test
-	public void testDeletionOfAnimal(){
+	public void testDeletionOfAnimal() throws SQLException {
 		Animal animal = new Animal(0,
 				"Bob",
 				"Cat",
@@ -115,7 +115,7 @@ public class AnimalRepositoryTest {
 	}
 
 	@Test
-	public void testUpdatingAnimal(){
+	public void testUpdatingAnimal() throws SQLException {
 		Animal animal = new Animal(0,
 				"Bob",
 				"Cat",

@@ -165,24 +165,61 @@ public class MenuServiceTest {
 
 	@Test
 	public void testSearchMenuOptionOne(){
-		String input = "1";
-		Scanner scanner = new Scanner(input);
+		ArrayList<Animal> animals = new ArrayList<>();
+
+		animals.addAll(Arrays.asList(
+				new Animal(1,"Bob","Cat","",12,"","",null),
+				new Animal(2,"Larry","Dog","",12,"","",null),
+				new Animal(3,"Mo","Cat","",12,"","",null)));
+
+		ByteArrayInputStream inputStream = new ByteArrayInputStream((
+				"1\n" +
+						"1\n" +
+						"1\n"
+
+
+		).getBytes());
+		System.setIn(inputStream);
+		Scanner scanner = new Scanner(System.in);
+		scanner.useDelimiter("[\n]");
 		MenuService menuService = new MenuService(scanner);
 
-//		//int response = menuService.promptSearchMenu("View Details Menu");
-//
-//		assertThat(response, equalTo(1));
+		Animal animal = menuService.promptSearchForAnimal("View Details Menu",animals);
+		assertThat(outputStream.toString(),containsString("View Details Menu"));
+		assertThat(outputStream.toString(),containsString("Lookup by ID"));
+		assertThat(outputStream.toString(),containsString("Lookup by Name"));
+		assertThat(animal, equalTo(animals.get(0)));
 	}
 
 	@Test
 	public void testSearchMenuOptionTwo(){
-		String input = "2";
-		Scanner scanner = new Scanner(input);
+		ArrayList<Animal> animals = new ArrayList<>();
+
+		animals.addAll(Arrays.asList(
+				new Animal(1,"Bob","Cat","",12,"","",null),
+				new Animal(2,"Larry","Dog","",12,"","",null),
+				new Animal(3,"Mo","Cat","",12,"","",null)));
+
+		ByteArrayInputStream inputStream = new ByteArrayInputStream((
+				"2\n" +
+
+						"Bob\n" +
+						"1\n"
+
+
+		).getBytes());
+		System.setIn(inputStream);
+		Scanner scanner = new Scanner(System.in);
+		scanner.useDelimiter("[\n]");
 		MenuService menuService = new MenuService(scanner);
 
-//		int response = menuService.promptSearchMenu("View Details Menu");
+		Animal animal = menuService.promptSearchForAnimal("View Details Menu",animals);
 //
-//		assertThat(response, equalTo(2));
+		assertThat(outputStream.toString(),containsString("View Details Menu"));
+		assertThat(outputStream.toString(),containsString("Lookup by ID"));
+		assertThat(outputStream.toString(),containsString("Lookup by Name"));
+		assertThat(outputStream.toString(),containsString("Please enter a name you would"));
+		assertThat(animal, equalTo(animals.get(0)));
 	}
 
 	@Test
@@ -319,6 +356,50 @@ public class MenuServiceTest {
 		assertThat(animal.getSpecies(),equalTo("Dog"));
 		assertThat(animal.getBreed(),equalTo("Mut"));
 		assertThat(animal.getDescription(),equalTo("Likes to lick."));
+	}
+	@Test
+	public void testCreatingAnimal(){
+		ByteArrayInputStream inputStream = new ByteArrayInputStream((
+				"Larry\n" +
+						"Dog\n" +
+						"Mut\n" +
+						"1\n" +
+						"male\n" +
+						"Likes to lick.\n"
+		).getBytes());
+
+		System.setIn(inputStream);
+		Scanner scanner = new Scanner(System.in);
+		scanner.useDelimiter("[\n]");
+
+		MenuService menuService = new MenuService(scanner);
+
+		Animal animal = menuService.createAnimal();
+
+
+		assertThat(outputStream.toString(),containsString("Name"));
+		assertThat(outputStream.toString(),containsString("Species"));
+		assertThat(outputStream.toString(),containsString("Breed"));
+		assertThat(outputStream.toString(),containsString("Age"));
+		assertThat(outputStream.toString(),containsString("Gender"));
+		assertThat(outputStream.toString(),containsString("Description"));
+		assertThat(animal.getName(),equalTo("Larry"));
+		assertThat(animal.getSpecies(),equalTo("Dog"));
+		assertThat(animal.getBreed(),equalTo("Mut"));
+		assertThat(animal.getDescription(),equalTo("Likes to lick."));
+
+	}
+
+	@Test
+	public void testPause(){
+		String input = "1";
+		Scanner scanner = new Scanner(input);
+		MenuService menuService = new MenuService(scanner);
+
+		menuService.pause();
+
+		assertThat(outputStream.toString(), containsString("Press ENTER when ready to continue..."));
+
 	}
 
 }

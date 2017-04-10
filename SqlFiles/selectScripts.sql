@@ -11,5 +11,14 @@ FROM animal as a
   JOIN species as s on b.species_id = s.id where a.animal_name='Pablo';
 
 
+SELECT * FROM animal
+  JOIN animal_type on animal.id = animal_type.animal_id
+  JOIN breed ON animal_type.breed_id = breed.id
+  JOIN species ON breed.species_id = species.id
+  WHERE lower(species.species_type) = 'cat';
+
+
+SELECT * from animal;
+
 
 
