@@ -11,6 +11,9 @@ public class AnimalService {
 	public AnimalService(){
 		 this.repository  = new AnimalRepository("jdbc:postgresql://localhost:5432/animalshelter");
 	}
+	public AnimalService(String jdbcUrl){
+		this.repository  = new AnimalRepository(jdbcUrl);
+	}
 
 	public ArrayList<Animal> getAnimals(){
 		return repository.listAnimals();
@@ -31,5 +34,7 @@ public class AnimalService {
 		repository.deleteAnimal(animal);
 	}
 
-
+	public Animal getAnimalByName(String name){
+		return repository.getAnimalByName(name);
+	}
 }

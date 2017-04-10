@@ -213,19 +213,19 @@ public class AnimalRepository {
 			sqle.printStackTrace();
 		}
 	}
-	/**
+	/**Note in use
 	 * sets animal to be visible
 	 * @param animal
 	 */
-	public void setAnimalVisiblitiy(Animal animal){
-		try {
-			prestmt = conn.prepareStatement("UPDATE animal SET " +
-					"isvisible=NOT (SELECT isvisible FROM animal WHERE id="+animal.getId()+")");
-
-		}catch (SQLException sqle){
-			sqle.printStackTrace();
-		}
-	}
+//	public void setAnimalVisiblitiy(Animal animal){
+//		try {
+//			prestmt = conn.prepareStatement("UPDATE animal SET " +
+//					"isvisible=NOT (SELECT isvisible FROM animal WHERE id="+animal.getId()+")");
+//
+//		}catch (SQLException sqle){
+//			sqle.printStackTrace();
+//		}
+//	}
 	/**
 	 * deletes animal
 	 * @param animal
@@ -261,24 +261,24 @@ public class AnimalRepository {
 		return species;
 	}
 
-	/**
+	/**Note in use
 	 * gets list of breeds based on species
 	 * @param species
 	 * @return
 	 */
-	public ArrayList<String> getListOfBreedsOfSpeciesType(String species){
-		ArrayList<String> breeds = new ArrayList<>();
-		try {
-			prestmt.executeQuery("SELECT breed_type from breed where " +
-					"species_id=(SELECT id FROM species where lower(species_type)='" + species.toLowerCase() + "')");
-			rs = prestmt.executeQuery();
-			while(rs.next()){
-				breeds.add(rs.getString("breed_type"));
-			}
-		}catch (SQLException sqle){
-
-		}
-		return breeds;
-	}
+//	public ArrayList<String> getListOfBreedsOfSpeciesType(String species){
+//		ArrayList<String> breeds = new ArrayList<>();
+//		try {
+//			prestmt.executeQuery("SELECT breed_type from breed where " +
+//					"species_id=(SELECT id FROM species where lower(species_type)='" + species.toLowerCase() + "')");
+//			rs = prestmt.executeQuery();
+//			while(rs.next()){
+//				breeds.add(rs.getString("breed_type"));
+//			}
+//		}catch (SQLException sqle){
+//
+//		}
+//		return breeds;
+//	}
 
 }

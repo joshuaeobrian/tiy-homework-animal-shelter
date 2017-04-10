@@ -74,4 +74,71 @@ public class AnimalTest {
 		animal.setDescription("Likes to drink water");
 		assertThat(animal.getDescription(),equalTo("Likes to drink water"));
 	}
+	@Test
+	public void getValueOfID(){
+		Animal animal = new Animal(3,"Bob", "cat", "mut",0,"male","likes to eat",LocalDate.now());
+
+		assertThat(animal.getId(),equalTo(3));
+		assertThat(animal.getDateReceived(),equalTo(LocalDate.now()));
+	}
+	@Test
+	public void getValueOfAge(){
+		Animal animal = new Animal(3,"Bob", "cat", "mut",1,"male","likes to eat",LocalDate.now());
+
+		assertThat(animal.getAge(),equalTo(1));
+		assertThat(animal.getDateReceived(),equalTo(LocalDate.now()));
+	}
+	@Test
+	public void getValueOfGender(){
+		Animal animal = new Animal(3,"Bob", "cat", "mut",0,"male","likes to eat",LocalDate.now());
+
+		assertThat(animal.getGender(),equalTo("male"));
+		assertThat(animal.getDateReceived(),equalTo(LocalDate.now()));
+	}
+	@Test
+	public void getValueOfDateReceived(){
+		Animal animal = new Animal(3,"Bob", "cat", "mut",0,"male","likes to eat",LocalDate.now());
+
+
+		assertThat(animal.getDateReceived(),equalTo(LocalDate.now()));
+	}
+
+	@Test
+	public void setValueOfID(){
+		Animal animal = new Animal(3,"Bob", "cat", "mut",0,"male","likes to eat",LocalDate.now());
+		animal.setId(4);
+		assertThat(animal.getId(),equalTo(4));
+		assertThat(animal.getDateReceived(),equalTo(LocalDate.now()));
+	}
+	@Test
+	public void setValueOfAge(){
+		Animal animal = new Animal(3,"Bob", "cat", "mut",1,"male","likes to eat",LocalDate.now());
+		animal.setAge(5);
+		assertThat(animal.getAge(),equalTo(5));
+		assertThat(animal.getDateReceived(),equalTo(LocalDate.now()));
+	}
+	@Test
+	public void setValueOfGender(){
+		Animal animal = new Animal(3,"Bob", "cat", "mut",0,"male","likes to eat",LocalDate.now());
+		animal.setGender("Female");
+		assertThat(animal.getGender(),equalTo("Female"));
+		assertThat(animal.getDateReceived(),equalTo(LocalDate.now()));
+	}
+	@Test
+	public void setValueOfDateReceived(){
+		Animal animal = new Animal(3,"Bob", "cat", "mut",0,"male","likes to eat",LocalDate.now());
+
+		animal.setDateReceived(LocalDate.parse("2017-01-01"));
+
+		assertThat(animal.getDateReceived(),equalTo(LocalDate.parse("2017-01-01")));
+	}
+
+	@Test
+	public void setValueOfDateRelease(){
+		Animal animal = new Animal(3,"Bob", "cat", "mut",0,"male","likes to eat",LocalDate.now());
+
+		animal.setDateRelease(LocalDate.parse("2017-01-01"));
+
+		assertThat(animal.getDateRelease(),equalTo(LocalDate.parse("2017-01-01")));
+	}
 }
