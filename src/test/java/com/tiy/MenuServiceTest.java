@@ -201,9 +201,8 @@ public class MenuServiceTest {
 				new Animal(3,"Mo","Cat","",12,"","",null)));
 
 		ByteArrayInputStream inputStream = new ByteArrayInputStream((
-				"1\n" +
-						"1\n" +
-						"2\n" +
+				"2\n" +
+
 						"Bob\n" +
 						"1\n"
 
@@ -219,7 +218,7 @@ public class MenuServiceTest {
 		assertThat(outputStream.toString(),containsString("View Details Menu"));
 		assertThat(outputStream.toString(),containsString("Lookup by ID"));
 		assertThat(outputStream.toString(),containsString("Lookup by Name"));
-
+		assertThat(outputStream.toString(),containsString("Please enter a name you would"));
 		assertThat(animal, equalTo(animals.get(0)));
 	}
 

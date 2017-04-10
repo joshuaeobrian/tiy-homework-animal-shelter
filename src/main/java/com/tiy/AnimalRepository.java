@@ -13,14 +13,10 @@ public class AnimalRepository {
 	private PreparedStatement prestmt;
 	private ResultSet rs;
 	//starts connection to server
-	public AnimalRepository(String conn){
+	public AnimalRepository(String conn) throws SQLException {
 
-		try{
+
 			this.conn = DriverManager.getConnection(conn);
-
-		}catch (SQLException e){
-			e.printStackTrace();
-		}
 
 	}
 
@@ -28,9 +24,9 @@ public class AnimalRepository {
 	 * get a list of animals in the database
 	 * @return
 	 */
-	public ArrayList<Animal> listAnimals(){
+	public ArrayList<Animal> listAnimals() throws SQLException {
 		ArrayList<Animal> animals = new ArrayList<>();
-		try{
+
 			stmt = conn.createStatement();
 			rs = stmt.executeQuery("SELECT a.id as id, a.animal_name AS name, b.breed_type as breed, s.species_type as species, a.age as age" +
 					", g.gender_type as gender, a.description as description, a.receive_date as date\n" +
@@ -53,9 +49,7 @@ public class AnimalRepository {
 						LocalDate.parse(rs.getString("date"))));
 			}
 
-		}catch (SQLException sqle){
-			System.out.println(sqle.getMessage());
-		}
+
 
 		return animals;
 	}
@@ -65,19 +59,20 @@ public class AnimalRepository {
 	 * @param name
 	 * @return
 	 */
-	public Animal getAnimalByName(String name) {
+	public Animal getAnimalByName(String name) throws SQLException {
 		Animal animal = null;
-		try{
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery("SELECT a.id as id, a.animal_name AS name, b.breed_type as breed, s.species_type as species, a.age as age" +
+
+			prestmt = conn.prepareStatement("SELECT a.id as id, a.animal_name AS name, b.breed_type as breed, s.species_type as species, a.age as age" +
 					", g.gender_type as gender, a.description as description, a.receive_date as date\n" +
 					" FROM animal as a\n" +
 					"  JOIN gender as g ON a.gender_id = g.id\n" +
 					"  JOIN animal_type as at ON a.id = at.animal_id\n" +
 					"  JOIN breed as b ON at.breed_id = b.id\n" +
 					"  JOIN species as s on b.species_id = s.id\n" +
-					"   WHERE lower(animal_name)='"+name.toLowerCase()+"';"
+					"   WHERE lower(animal_name)=?;"
 			);
+			prestmt.setString(1,name.toLowerCase());
+			rs = prestmt.executeQuery();
 			if(rs.next()){
 
 
@@ -91,9 +86,6 @@ public class AnimalRepository {
 						LocalDate.parse(rs.getString("date")));
 			}
 
-		}catch (SQLException sqle){
-			System.out.println(sqle.getMessage());
-		}
 		return animal;
 	}
 
@@ -102,9 +94,9 @@ public class AnimalRepository {
 	 * @param animal
 	 * @return
 	 */
-	public int addAnimal(Animal animal){
+	public int addAnimal(Animal animal) throws SQLException {
 		int response = 0;
-		try {
+
 			prestmt = conn.prepareStatement("INSERT INTO animal(animal_name, age, description, receive_date, gender_id) VALUES (\n" +
 					"    '"+animal.getName()+"',\n" +
 					"    "+animal.getAge()+",\n" +
@@ -126,10 +118,8 @@ public class AnimalRepository {
 			prestmt.setString(2,animal.getBreed().toLowerCase());
 			response += prestmt.executeUpdate();
 
-		}catch (SQLException sqle){
-			sqle.printStackTrace();
-		}
-		System.out.println(response);
+
+
 		return response;
 	}
 
@@ -138,9 +128,9 @@ public class AnimalRepository {
 	 * @param species
 	 * @return
 	 */
-	public boolean checkForSpecies(String species){
+	public boolean checkForSpecies(String species) throws SQLException {
 		boolean specieExists = false;
-		try{
+
 			prestmt = conn.prepareStatement("SELECT id FROM species WHERE lower(species_type)='"+species.toLowerCase()+"'");
 			rs = prestmt.executeQuery();
 			if(rs.isBeforeFirst()) {
@@ -153,9 +143,6 @@ public class AnimalRepository {
 				prestmt.executeUpdate();
 			}
 
-		}catch (SQLException sqle){
-				sqle.printStackTrace();
-		}
 		return specieExists;
 	}
 
@@ -165,9 +152,9 @@ public class AnimalRepository {
 	 * @param species
 	 * @return
 	 */
-	public boolean checkForBreed(String breed,String species){
+	public boolean checkForBreed(String breed,String species) throws SQLException {
 		boolean breedExists = false;
-		try{
+
 			prestmt = conn.prepareStatement("SELECT id FROM breed WHERE lower(breed_type)=?");
 			prestmt.setString(1,breed.toLowerCase());
 			rs = prestmt.executeQuery();
@@ -179,12 +166,10 @@ public class AnimalRepository {
 					}
 				}else{
 					prestmt = conn.prepareStatement("INSERT INTO breed(breed_type, species_id)VALUES ('"+breed.toLowerCase()+"'," +
-							"(SELECT id FROM species WHERE lower(species_type)='"+species.toLowerCase()+"'))");
+							"(SELECT id FROM species WHERE lower(species_type)=?))");
+					prestmt.setString(1,species.toLowerCase());
 					prestmt.executeUpdate();
 				}
-		}catch (SQLException sqle){
-			sqle.printStackTrace();
-		}
 
 		return breedExists;
 	}
@@ -193,25 +178,25 @@ public class AnimalRepository {
 	 * updates animal
 	 * @param animal
 	 */
-	public void updateAnimal(Animal animal){
-		try {
+	public void updateAnimal(Animal animal) throws SQLException {
+
 			prestmt = conn.prepareStatement("UPDATE animal SET " +
 					" animal_name='"+animal.getName()+"'," +
 					" age='"+animal.getAge()+"'," +
 					" description='"+animal.getDescription()+"'," +
 					"gender_id=(SELECT id from gender where lower(gender_type)='"+animal.getGender().toLowerCase()+"')" +
-					"WHERE id="+animal.getId()+"");
+					"WHERE id=?");
+			prestmt.setInt(1,animal.getId());
 			prestmt.executeUpdate();
 			checkForSpecies(animal.getSpecies());
 			checkForBreed(animal.getBreed(),animal.getSpecies());
 
 			prestmt = conn.prepareStatement("UPDATE animal_type SET breed_id=(SELECT id FROM breed where lower(breed_type)='"+animal.getBreed().toLowerCase()+"') " +
-					"WHERE animal_id="+animal.getId()+"");
+					"WHERE animal_id=?");
+			prestmt.setInt(1,animal.getId());
 			prestmt.executeUpdate();
 			//update animal where id=1
-		}catch (SQLException sqle){
-			sqle.printStackTrace();
-		}
+
 	}
 	/**Note in use
 	 * sets animal to be visible
@@ -230,8 +215,8 @@ public class AnimalRepository {
 	 * deletes animal
 	 * @param animal
 	 */
-	public void deleteAnimal(Animal animal){
-		try {
+	public void deleteAnimal(Animal animal) throws SQLException {
+
 
 			prestmt = conn.prepareStatement("DELETE FROM animal_type WHERE animal_id="+animal.getId()+";");
 			prestmt.executeUpdate();
@@ -240,9 +225,6 @@ public class AnimalRepository {
 					" WHERE id="+animal.getId()+";");
 			prestmt.executeUpdate();
 
-		}catch (SQLException sqle){
-			sqle.printStackTrace();
-		}
 
 	}
 

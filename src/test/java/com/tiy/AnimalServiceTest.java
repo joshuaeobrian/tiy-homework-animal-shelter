@@ -13,8 +13,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.core.IsEqual.*;
+import static org.junit.Assert.fail;
+
 /**
  * Created by josh on 4/9/17.
  */
@@ -34,23 +37,36 @@ public class AnimalServiceTest {
 		}
 	}
 	@Test
-	public void testConstructorWithSting(){
-		try{
-			conn = DriverManager.getConnection(jdbcURL);
+	public void testConstructorWithSting() throws SQLException {
+
+
 			service = new AnimalService(jdbcURL);
-		}catch (SQLException e){
-			e.printStackTrace();
-		}
+
+
 	}
 	@Test
-	public void testGetListOfAnimals(){
+	public void testConstructorWithOutSting() throws SQLException {
+		try {
+
+			service = new AnimalService();
+			fail("Expected for Connection to Fail");
+		}catch (SQLException sql){
+
+			assertThat(sql.getMessage(),containsString("Connection to"));
+			assertThat(sql.getMessage(),containsString("refused"));
+		}
+
+
+	}
+	@Test
+	public void testGetListOfAnimals() throws SQLException {
 		animals = service.getAnimals();
 		boolean returnSize = animals.size() >0;
 		assertThat(returnSize, equalTo(true));
 	}
 
 	@Test
-	public void testAddingAnimal(){
+	public void testAddingAnimal() throws SQLException {
 		Animal animal = new Animal(0,
 				"Bob",
 				"Cat",
@@ -66,7 +82,7 @@ public class AnimalServiceTest {
 
 	}
 	@Test
-	public void testDeletingAnimal(){
+	public void testDeletingAnimal() throws SQLException {
 		Animal animal = new Animal(0,
 				"Bob",
 				"Cat",
@@ -84,12 +100,12 @@ public class AnimalServiceTest {
 	}
 
 	@Test
-	public void testUpdatingAnimal(){
+	public void testUpdatingAnimal() throws SQLException {
 		Animal animal = service.getAnimalByName("Pablo");
 		int id = animal.getId();
-		animal.setName("Mike");
+		animal.setName("mike");
 		service.updateAnimal(animal);
-		assertThat(service.getAnimalByName("Mike").getId(),equalTo(id));
+		assertThat(service.getAnimalByName("mike").getId(),equalTo(id));
 
 	}
 	@Test
@@ -162,8 +178,8 @@ public class AnimalServiceTest {
 			System.out.println(name);
 		}
 		assertThat(clazz.getConstructors().length >0,equalTo(true));
-		assertThat(clazz.getConstructors()[0].toString(),equalTo("public com.tiy.AnimalService()"));
-		assertThat(clazz.getConstructors()[1].toString(),equalTo("public com.tiy.AnimalService(java.lang.String)"));
+		assertThat(clazz.getConstructors()[0].toString(),containsString("public com.tiy.AnimalService()"));
+		assertThat(clazz.getConstructors()[1].toString(),containsString("public com.tiy.AnimalService(java.lang.String)"));
 
 	}
 
